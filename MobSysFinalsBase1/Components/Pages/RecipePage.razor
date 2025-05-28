@@ -1,0 +1,85 @@
+﻿@page "/recipes"
+
+<h2 style="text-align:center; margin-bottom: 2rem;">🍽️ Recipes</h2>
+
+<div style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center;">
+    @foreach (var recipe in Recipes)
+    {
+        <div style="background: #fff; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); width: 320px; padding: 1.5rem; display: flex; flex-direction: column; align-items: center;">
+            <img src="@recipe.ImagePath" alt="@recipe.Name" style="width: 100%; height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem;" />
+            <h3 style="margin: 0.5rem 0;">@recipe.Name</h3>
+            <p style="color: #666; margin-bottom: 0.5rem;">
+                <span style="font-weight: 600;">Prep Time:</span> @recipe.PrepTimeMinutes min
+            </p>
+            <ul style="width: 100%; padding-left: 1.2rem;">
+                @foreach (var ingredient in recipe.Ingredients)
+                {
+                    <li>
+                        @ingredient.Name:
+                        @ingredient.AmountUS @ingredient.UnitUS
+                        (<span style="color: #0078d4;">@ConvertToMetric(ingredient.AmountUS, ingredient.UnitUS) @ingredient.UnitMetric</span>)
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</div>
+
+@code {
+    public class Recipe
+    {
+        public string Name { get; set; } = "";
+        public int PrepTimeMinutes { get; set; }
+        public List<Ingredient> Ingredients { get; set; } = new();
+        public string ImagePath { get; set; } = "";
+    }
+
+    public class Ingredient
+    {
+        public string Name { get; set; } = "";
+        public double AmountUS { get; set; }
+        public string UnitUS { get; set; } = "";
+        public string UnitMetric { get; set; } = "";
+    }
+
+    // Example data with images (place your images in Resources/Images)
+    List<Recipe> Recipes = new()
+    {
+        new Recipe
+        {
+            Name = "Pancakes",
+            PrepTimeMinutes = 10,
+            ImagePath = "wwwroot/imgs/Pancake.jpg",
+            Ingredients = new List<Ingredient>
+            {
+                new Ingredient { Name = "Flour", AmountUS = 1, UnitUS = "cup", UnitMetric = "g" },
+                new Ingredient { Name = "Milk", AmountUS = 1, UnitUS = "cup", UnitMetric = "ml" },
+                new Ingredient { Name = "Egg", AmountUS = 1, UnitUS = "piece", UnitMetric = "piece" }
+            }
+        },
+        new Recipe
+        {
+            Name = "Omelette",
+            PrepTimeMinutes = 5,
+            ImagePath = "Resources/Images/omelette.jpg",
+            Ingredients = new List<Ingredient>
+            {
+                new Ingredient { Name = "Egg", AmountUS = 2, UnitUS = "piece", UnitMetric = "piece" },
+                new Ingredient { Name = "Milk", AmountUS = 0.25, UnitUS = "cup", UnitMetric = "ml" }
+            }
+        }
+    };
+
+    // Simple US to Metric conversion (for demo purposes)
+    double ConvertToMetric(double amount, string unitUS)
+    {
+        return unitUS switch
+        {
+            "cup" => Math.Round(amount * 236.588, 1), // 1 cup = 236.588 ml/g
+            "tbsp" => Math.Round(amount * 14.787, 1), // 1 tbsp = 14.787 ml
+            "tsp" => Math.Round(amount * 4.929, 1),   // 1 tsp = 4.929 ml
+            "oz" => Math.Round(amount * 28.35, 1),    // 1 oz = 28.35 g
+            _ => amount
+        };
+    }
+}
