@@ -1,4 +1,125 @@
 ﻿@page "/login"
+
+@page "/login"
+
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: #f3f4f6;
+        margin: 0;
+    }
+
+    .login-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    form {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .card.enhanced {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+        animation: fadeIn 0.4s ease;
+    }
+
+    fieldset {
+        border: none;
+        margin: 0 0 1.5rem;
+        padding: 0;
+        position: relative;
+    }
+
+    legend {
+        position: absolute;
+        top: -10px;
+        left: 12px;
+        background: white;
+        padding: 0 0.5rem;
+        font-size: 0.8rem;
+        color: #6b7280;
+        font-weight: 500;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .form-control:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+            outline: none;
+        }
+
+    .btn.btn-warning.scaledbutton {
+        width: 100%;
+        background-color: #3b82f6;
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+        .btn.btn-warning.scaledbutton:hover {
+            background-color: #2563eb;
+            transform: scale(1.03);
+        }
+
+    .alert {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 6px;
+        font-size: 0.95rem;
+    }
+
+    .alert-info {
+        background-color: #e0f2fe;
+        color: #0369a1;
+    }
+</style>
+
+<div class="login-wrapper">
+    <form @onsubmit="LoginUser">
+        <div class="card enhanced">
+            @if (!string.IsNullOrWhiteSpace(StatusMessage))
+            {
+                <div class="alert alert-@Status">
+                    <i class="fa fa-info-circle"></i>&nbsp;
+                    @StatusMessage
+                </div>
+            }
+            <fieldset>
+                <legend>Username:</legend>
+                <input class="form-control" type="text" @bind="Model.Username" placeholder="Username" title="Username" />
+            </fieldset>
+            <fieldset>
+                <legend>Password:</legend>
+                <input type="password" @bind="Model.Password" placeholder="Password" title="Password" class="form-control ">
+            </fieldset>
+            <button type="submit" class="btn btn-warning scaledbutton">
+                <i class="fas fa-sign-in-alt"></i>&nbsp;Log In
+            </button>
+        </div>
+    </form>
+</div>
+
 <form @onsubmit="LoginUser">
     <div class="card enhanced">
         @if (!string.IsNullOrWhiteSpace(StatusMessage))
